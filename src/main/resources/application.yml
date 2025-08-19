@@ -1,0 +1,42 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: spring
+  datasource:
+    #    url: jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_DELAY=-1
+    #    url: jdbc:h2:tcp://localhost/~/querydsl;MODE=MySQL;DB_CLOSE_DELAY=-1
+    #    username: sa
+    #    password:
+    #    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/kt_project
+    username: sy
+    password: sy
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        #        dialect: org.hibernate.dialect.MySQL8Dialect
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        # PostgreSQL 컬럼명 자동 소문자 변환 설정
+        globally_quoted_identifiers: true
+        globally_quoted_identifiers_skip_column_definitions: true
+  #        default_batch_fetch_size: 500
+
+  logging:
+    level:
+      org.hibernate.SQL : debug
+      #      org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+      p6spy: debug
+      KT.PLIP: DEBUG
+      org.springframework.security: DEBUG
+      org.springframework.web: DEBUG
