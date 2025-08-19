@@ -155,6 +155,12 @@ public class PopulationDetailService {
             
             DailyPopulationDto.DailyData data = new DailyPopulationDto.DailyData();
             data.setDate(local.getStdrDeId() != null ? local.getStdrDeId() : "20240101"); // null 체크
+            // 요일 설정
+            try {
+                data.setWeekday(getWeekdayFromDate(data.getDate()));
+            } catch (Exception e) {
+                data.setWeekday("알 수 없음");
+            }
             data.setLocalPopulation(local.getTotLvpopCo() != null ? local.getTotLvpopCo() : 0);
             
             // 시간대 정보 설정
@@ -289,8 +295,6 @@ public class PopulationDetailService {
             dto.setAveragePopulation(0);
             dto.setMaxPopulation(0);
             dto.setMinPopulation(0);
-            dto.setMaxDate("2024-01-01");
-            dto.setMinDate("2024-01-01");
             return dto;
         }
         
@@ -298,29 +302,13 @@ public class PopulationDetailService {
         int totalPopulation = dailyPopulation.values().stream().mapToInt(Integer::intValue).sum();
         double averagePopulation = (double) totalPopulation / dailyPopulation.size();
         
-        // 최대/최소 날짜와 인구 찾기
-        String maxDate = dailyPopulation.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse("2024-01-01");
-        
-        String minDate = dailyPopulation.entrySet().stream()
-                .min(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse("2024-01-01");
-        
-        int maxPopulation = dailyPopulation.get(maxDate);
-        int minPopulation = dailyPopulation.get(minDate);
-        
-        // 날짜 형식 변환 (YYYYMMDD -> YYYY-MM-DD)
-        String formattedMaxDate = formatDate(maxDate);
-        String formattedMinDate = formatDate(minDate);
+        // 최대/최소 인구 찾기
+        int maxPopulation = dailyPopulation.values().stream().mapToInt(Integer::intValue).max().orElse(0);
+        int minPopulation = dailyPopulation.values().stream().mapToInt(Integer::intValue).min().orElse(0);
         
         dto.setAveragePopulation((int) averagePopulation);
         dto.setMaxPopulation(maxPopulation);
         dto.setMinPopulation(minPopulation);
-        dto.setMaxDate(formattedMaxDate);
-        dto.setMinDate(formattedMinDate);
         
         return dto;
     }
@@ -343,11 +331,19 @@ public class PopulationDetailService {
         
         try {
             int hour = Integer.parseInt(tmzonPdSe);
-            if (hour >= 1 && hour <= 24) {
-                int startHour = hour - 1;
-                int endHour = hour;
-                
-                String timeZone;
+            int startHour;
+            int endHour;
+            String timeZone;
+
+            if (hour == 0) {
+                // 00 코드를 00:00-01:00, 새벽으로 처리
+                startHour = 0;
+                endHour = 1;
+                timeZone = "새벽";
+            } else if (hour >= 1 && hour <= 24) {
+                startHour = hour - 1;
+                endHour = hour;
+
                 if (hour >= 1 && hour <= 5) {
                     timeZone = "새벽";
                 } else if (hour >= 6 && hour <= 11) {
@@ -359,13 +355,14 @@ public class PopulationDetailService {
                 } else {
                     timeZone = "밤";
                 }
-                
-                data.setTimeZone(timeZone);
-                data.setTimeRange(String.format("%02d:00-%02d:00", startHour, endHour));
             } else {
                 data.setTimeZone("알 수 없음");
                 data.setTimeRange("알 수 없음");
+                return;
             }
+
+            data.setTimeZone(timeZone);
+            data.setTimeRange(String.format("%02d:00-%02d:00", startHour, endHour));
         } catch (NumberFormatException e) {
             data.setTimeZone("알 수 없음");
             data.setTimeRange("알 수 없음");

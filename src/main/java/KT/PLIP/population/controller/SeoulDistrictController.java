@@ -41,13 +41,6 @@ public class SeoulDistrictController {
                 .orElse(ResponseEntity.notFound().build());
     }
     
-    // 새 구 추가
-    @PostMapping
-    public ResponseEntity<SeoulDistrictResponseDto> addDistrict(@RequestBody SeoulDistrictResponseDto requestDto) {
-        SeoulDistrictResponseDto newDistrict = seoulDistrictService.addDistrict(requestDto);
-        return ResponseEntity.ok(newDistrict);
-    }
-    
     // 구 정보 수정
     @PutMapping("/{districtCode}")
     public ResponseEntity<SeoulDistrictResponseDto> updateDistrict(

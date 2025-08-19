@@ -88,4 +88,6 @@ public class PopulationDetailController {
         DailyPopulationDto response = populationDetailService.getDailyPopulationByDongName(dongName);
         return ResponseEntity.ok(response);
     }
+    
+
 }
