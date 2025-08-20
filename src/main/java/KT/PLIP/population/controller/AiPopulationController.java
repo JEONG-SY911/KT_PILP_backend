@@ -16,7 +16,7 @@ import java.util.*;
 public class AiPopulationController {
     private final PopulationDetailService populationDetailService;
 
-    // GET /population/ai/bundle/{adstrdCode}?date=YYYYMMDD
+    // GET /population/ai/bundle/{adstrdCode}?date=YYYYMMDD - 서울 전체 지원
     @GetMapping("/bundle/{adstrdCode}")
     public ResponseEntity<AiPopulationBundleDto> getBundle(
             @PathVariable String adstrdCode,
@@ -146,5 +146,17 @@ public class AiPopulationController {
         bundle.setGenderAgePopulation(genderAgePopulation);
 
         return ResponseEntity.ok(bundle);
+    }
+    
+    // ===== 기존 강남구 엔드포인트 (하위 호환성을 위해 유지) =====
+    
+    // GET /population/ai/gangnam/bundle/{adstrdCode}?date=YYYYMMDD - 하위 호환성
+    @GetMapping("/gangnam/bundle/{adstrdCode}")
+    public ResponseEntity<AiPopulationBundleDto> getGangnamBundle(
+            @PathVariable String adstrdCode,
+            @RequestParam(required = false) String date
+    ) {
+        // 기존 로직과 동일하게 처리
+        return getBundle(adstrdCode, date);
     }
 }

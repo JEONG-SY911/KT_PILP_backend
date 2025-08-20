@@ -119,7 +119,7 @@ public class PopulationDetailService {
                 .map(this::convertToGangnamDto)
                 .collect(Collectors.toList());
     }
-
+    
     // 동 이름으로 상세 생활인구 현황 조회
     public PopulationDetailResponseDto getPopulationDetailByDongName(String dongName) {
         System.out.println("=== getPopulationDetailByDongName 시작 ===");
