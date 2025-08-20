@@ -7,4 +7,5 @@ public class DailyStatsDto {
     private Integer averagePopulation;
     private Integer maxPopulation;
     private Integer minPopulation;
+    private String date;
 }

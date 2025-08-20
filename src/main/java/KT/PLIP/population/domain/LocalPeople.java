@@ -15,91 +15,91 @@ public class LocalPeople {
     private Long id;
     
     @Column(name = "tot_lvpop_co")
-    private Integer totLvpopCo;
+    private Double totLvpopCo;
     
     @Column(name = "male_f0t9_lvpop_co")
-    private Integer maleF0t9LvpopCo;
+    private Double maleF0t9LvpopCo;
     
     @Column(name = "male_f10t14_lvpop_co")
-    private Integer maleF10t14LvpopCo;
+    private Double maleF10t14LvpopCo;
     
     @Column(name = "male_f15t19_lvpop_co")
-    private Integer maleF15t19LvpopCo;
+    private Double maleF15t19LvpopCo;
     
     @Column(name = "male_f20t24_lvpop_co")
-    private Integer maleF20t24LvpopCo;
+    private Double maleF20t24LvpopCo;
     
     @Column(name = "male_f25t29_lvpop_co")
-    private Integer maleF25t29LvpopCo;
+    private Double maleF25t29LvpopCo;
     
     @Column(name = "male_f30t34_lvpop_co")
-    private Integer maleF30t34LvpopCo;
+    private Double maleF30t34LvpopCo;
     
     @Column(name = "male_f35t39_lvpop_co")
-    private Integer maleF35t39LvpopCo;
+    private Double maleF35t39LvpopCo;
     
     @Column(name = "male_f40t44_lvpop_co")
-    private Integer maleF40t44LvpopCo;
+    private Double maleF40t44LvpopCo;
     
     @Column(name = "male_f45t49_lvpop_co")
-    private Integer maleF45t49LvpopCo;
+    private Double maleF45t49LvpopCo;
     
     @Column(name = "male_f50t54_lvpop_co")
-    private Integer maleF50t54LvpopCo;
+    private Double maleF50t54LvpopCo;
     
     @Column(name = "male_f55t59_lvpop_co")
-    private Integer maleF55t59LvpopCo;
+    private Double maleF55t59LvpopCo;
     
     @Column(name = "male_f60t64_lvpop_co")
-    private Integer maleF60t64LvpopCo;
+    private Double maleF60t64LvpopCo;
     
     @Column(name = "male_f65t69_lvpop_co")
-    private Integer maleF65t69LvpopCo;
+    private Double maleF65t69LvpopCo;
     
     @Column(name = "male_f70t74_lvpop_co")
-    private Integer maleF70t74LvpopCo;
+    private Double maleF70t74LvpopCo;
     
     @Column(name = "female_f0t9_lvpop_co")
-    private Integer femaleF0t9LvpopCo;
+    private Double femaleF0t9LvpopCo;
     
     @Column(name = "female_f10t14_lvpop_co")
-    private Integer femaleF10t14LvpopCo;
+    private Double femaleF10t14LvpopCo;
     
     @Column(name = "female_f15t19_lvpop_co")
-    private Integer femaleF15t19LvpopCo;
+    private Double femaleF15t19LvpopCo;
     
     @Column(name = "female_f20t24_lvpop_co")
-    private Integer femaleF20t24LvpopCo;
+    private Double femaleF20t24LvpopCo;
     
     @Column(name = "female_f25t29_lvpop_co")
-    private Integer femaleF25t29LvpopCo;
+    private Double femaleF25t29LvpopCo;
     
     @Column(name = "female_f30t34_lvpop_co")
-    private Integer femaleF30t34LvpopCo;
+    private Double femaleF30t34LvpopCo;
     
     @Column(name = "female_f35t39_lvpop_co")
-    private Integer femaleF35t39LvpopCo;
+    private Double femaleF35t39LvpopCo;
     
     @Column(name = "female_f40t44_lvpop_co")
-    private Integer femaleF40t44LvpopCo;
+    private Double femaleF40t44LvpopCo;
     
     @Column(name = "female_f45t49_lvpop_co")
-    private Integer femaleF45t49LvpopCo;
+    private Double femaleF45t49LvpopCo;
     
     @Column(name = "female_f50t54_lvpop_co")
-    private Integer femaleF50t54LvpopCo;
+    private Double femaleF50t54LvpopCo;
     
     @Column(name = "female_f55t59_lvpop_co")
-    private Integer femaleF55t59LvpopCo;
+    private Double femaleF55t59LvpopCo;
     
     @Column(name = "female_f60t64_lvpop_co")
-    private Integer femaleF60t64LvpopCo;
+    private Double femaleF60t64LvpopCo;
     
     @Column(name = "female_f65t69_lvpop_co")
-    private Integer femaleF65t69LvpopCo;
+    private Double femaleF65t69LvpopCo;
     
     @Column(name = "female_f70t74_lvpop_co")
-    private Integer femaleF70t74LvpopCo;
+    private Double femaleF70t74LvpopCo;
     
     @Column(name = "stdr_de_id")
     private String stdrDeId;

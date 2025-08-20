@@ -8,6 +8,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class TimeWeekPopulationDto {
-    private Map<String, Integer> timeSlotPopulation; // 시간대별 인구
-    private Map<String, Integer> weekdayPopulation; // 요일별 인구
+    private Map<String, Double> timeSlotPopulation; // 시간대별 인구
+    private Map<String, Double> weekdayPopulation; // 요일별 인구
 }

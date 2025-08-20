@@ -7,8 +7,8 @@ import java.util.Map;
 @Getter
 @Setter
 public class GenderAgePopulationDto {
-    private Integer malePopulation;
-    private Integer femalePopulation;
-    private Map<String, Integer> maleAgeGroup; // 남성 연령대별 인구
-    private Map<String, Integer> femaleAgeGroup; // 여성 연령대별 인구
+    private Double malePopulation;
+    private Double femalePopulation;
+    private Map<String, Double> maleAgeGroup; // 남성 연령대별 인구
+    private Map<String, Double> femaleAgeGroup; // 여성 연령대별 인구
 }

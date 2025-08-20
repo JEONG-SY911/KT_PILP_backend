@@ -40,20 +40,4 @@ public class SeoulDistrictController {
         return district.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
-    // 구 정보 수정
-    @PutMapping("/{districtCode}")
-    public ResponseEntity<SeoulDistrictResponseDto> updateDistrict(
-            @PathVariable String districtCode, 
-            @RequestBody SeoulDistrictResponseDto requestDto) {
-        SeoulDistrictResponseDto updatedDistrict = seoulDistrictService.updateDistrict(districtCode, requestDto);
-        return ResponseEntity.ok(updatedDistrict);
-    }
-    
-    // 구 비활성화
-    @DeleteMapping("/{districtCode}")
-    public ResponseEntity<Void> deactivateDistrict(@PathVariable String districtCode) {
-        seoulDistrictService.deactivateDistrict(districtCode);
-        return ResponseEntity.ok().build();
-    }
 }

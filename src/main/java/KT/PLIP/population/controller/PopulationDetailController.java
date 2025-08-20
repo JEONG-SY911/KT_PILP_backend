@@ -25,7 +25,23 @@ public class PopulationDetailController {
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 일별 생활인구 현황 조회
+    // 특정 동의 상세 생활인구 현황 조회
+    @GetMapping("/gangnam/dongs/{adstrdCode}")
+    public ResponseEntity<PopulationDetailResponseDto> getPopulationDetail(
+            @PathVariable String adstrdCode) {
+        PopulationDetailResponseDto response = populationDetailService.getPopulationDetail(adstrdCode);
+        return ResponseEntity.ok(response);
+    }
+    
+    // 동 이름으로 상세 생활인구 현황 조회
+    @GetMapping("/gangnam/dongs/name/{dongName}")
+    public ResponseEntity<PopulationDetailResponseDto> getPopulationDetailByDongName(
+            @PathVariable String dongName) {
+        PopulationDetailResponseDto response = populationDetailService.getPopulationDetailByDongName(dongName);
+        return ResponseEntity.ok(response);
+    }
+
+    // 일별 데이터 (시간대 정보 포함)
     @GetMapping("/gangnam/dongs/{adstrdCode}/daily")
     public ResponseEntity<DailyPopulationDto> getDailyPopulation(
             @PathVariable String adstrdCode) {
@@ -33,7 +49,17 @@ public class PopulationDetailController {
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 시간대별 생활인구 현황 조회
+    // 동 이름으로 일별 데이터 조회
+    @GetMapping("/gangnam/dongs/name/{dongName}/daily")
+    public ResponseEntity<DailyPopulationDto> getDailyPopulationByDongName(
+            @PathVariable String dongName) {
+        // 동 이름으로 행정동 코드 찾기 후 일별 데이터 조회
+        PopulationDetailResponseDto detail = populationDetailService.getPopulationDetailByDongName(dongName);
+        DailyPopulationDto response = populationDetailService.getDailyPopulation(detail.getAdstrdCodeSe());
+        return ResponseEntity.ok(response);
+    }
+    
+    // 시간대별 데이터
     @GetMapping("/gangnam/dongs/{adstrdCode}/time-based")
     public ResponseEntity<TimeBasedPopulationDto> getTimeBasedPopulation(
             @PathVariable String adstrdCode) {
@@ -41,7 +67,7 @@ public class PopulationDetailController {
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 일일 통계 조회
+    // 일일 통계 (평균/최대/최소)
     @GetMapping("/gangnam/dongs/{adstrdCode}/stats/daily")
     public ResponseEntity<DailyStatsDto> getDailyStats(
             @PathVariable String adstrdCode) {
@@ -49,45 +75,59 @@ public class PopulationDetailController {
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 주간/야간 통계 조회
+    // 주간/야간 통계
     @GetMapping("/gangnam/dongs/{adstrdCode}/stats/day-night")
-    public ResponseEntity<DayNightPopulationDto> getDayNightStats(
+    public ResponseEntity<DayNightPopulationDto> getDayNightPopulation(
             @PathVariable String adstrdCode) {
         DayNightPopulationDto response = populationDetailService.getDayNightPopulation(adstrdCode);
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 시간대/요일별 통계 조회
+    // 시간대/요일별 통계
     @GetMapping("/gangnam/dongs/{adstrdCode}/stats/time-week")
-    public ResponseEntity<TimeWeekPopulationDto> getTimeWeekStats(
+    public ResponseEntity<TimeWeekPopulationDto> getTimeWeekPopulation(
             @PathVariable String adstrdCode) {
         TimeWeekPopulationDto response = populationDetailService.getTimeWeekPopulation(adstrdCode);
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 주중/주말 통계 조회
+    // 주중/주말 통계
     @GetMapping("/gangnam/dongs/{adstrdCode}/stats/weekday-weekend")
-    public ResponseEntity<WeekdayWeekendPopulationDto> getWeekdayWeekendStats(
+    public ResponseEntity<WeekdayWeekendPopulationDto> getWeekdayWeekendPopulation(
             @PathVariable String adstrdCode) {
         WeekdayWeekendPopulationDto response = populationDetailService.getWeekdayWeekendPopulation(adstrdCode);
         return ResponseEntity.ok(response);
     }
     
-    // 특정 동의 성별/연령별 통계 조회
+    // 성별/연령별 통계
     @GetMapping("/gangnam/dongs/{adstrdCode}/stats/gender-age")
-    public ResponseEntity<GenderAgePopulationDto> getGenderAgeStats(
+    public ResponseEntity<GenderAgePopulationDto> getGenderAgePopulation(
             @PathVariable String adstrdCode) {
         GenderAgePopulationDto response = populationDetailService.getGenderAgePopulation(adstrdCode);
         return ResponseEntity.ok(response);
     }
     
-    // 동 이름으로 일별 생활인구 현황 조회
-    @GetMapping("/gangnam/dongs/name/{dongName}/daily")
-    public ResponseEntity<DailyPopulationDto> getDailyPopulationByDongName(
-            @PathVariable String dongName) {
-        DailyPopulationDto response = populationDetailService.getDailyPopulationByDongName(dongName);
+    // 성별별 총 인구수
+    @GetMapping("/gangnam/dongs/{adstrdCode}/stats/gender")
+    public ResponseEntity<GenderPopulationDto> getGenderPopulation(
+            @PathVariable String adstrdCode) {
+        GenderPopulationDto response = populationDetailService.getGenderPopulation(adstrdCode);
         return ResponseEntity.ok(response);
     }
     
-
+    // // 성별별 연령대 분포
+    // @GetMapping("/gangnam/dongs/{adstrdCode}/stats/gender-age-distribution")
+    // public ResponseEntity<GenderAgePopulationDto> getGenderAgePopulation(
+    //         @PathVariable String adstrdCode) {
+    //             GenderAgePopulationDto response = populationDetailService.getGenderAgePopulation(adstrdCode);
+    //     return ResponseEntity.ok(response);
+    // }
+    
+    // 성별별 시간대 분포
+    @GetMapping("/gangnam/dongs/{adstrdCode}/stats/gender-time")
+    public ResponseEntity<GenderTimeDistributionDto> getGenderTimeDistribution(
+            @PathVariable String adstrdCode) {
+        GenderTimeDistributionDto response = populationDetailService.getGenderTimeDistribution(adstrdCode);
+        return ResponseEntity.ok(response);
+    }
 }

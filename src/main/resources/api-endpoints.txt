@@ -11,6 +11,7 @@ GET /health             # 서버 상태 확인
 GET /population/seoul/districts                  # 서울 전체 구 목록 조회 (활성화된 구만)
 GET /population/seoul/districts/{districtCode}   # 구 코드로 구 정보 조회
 GET /population/seoul/districts/name/{districtName} # 구 이름으로 구 정보 조회
+POST /population/seoul/districts                 # 새 구 추가
 PUT /population/seoul/districts/{districtCode}   # 구 정보 수정
 DELETE /population/seoul/districts/{districtCode} # 구 비활성화
 
@@ -41,6 +42,15 @@ GET /population/gangnam/dongs/{adstrdCode}/stats/weekday-weekend
 
 # 성별/연령별 통계
 GET /population/gangnam/dongs/{adstrdCode}/stats/gender-age
+
+# 성별별 총 인구수
+GET /population/gangnam/dongs/{adstrdCode}/stats/gender
+
+# 성별별 연령대 분포
+GET /population/gangnam/dongs/{adstrdCode}/stats/gender-age-distribution
+
+# 성별별 시간대 분포
+GET /population/gangnam/dongs/{adstrdCode}/stats/gender-time
 
 국내 인구 데이터
 --------------
@@ -90,7 +100,6 @@ GET /population/gangnam/dongs/11680640/daily
   "dailyDataList": [
     {
       "date": "20250813",
-      "weekday": "화요일",
       "timeZone": "새벽",
       "timeRange": "00:00-01:00",
       "tmzonPdSe": "01",
@@ -136,7 +145,9 @@ GET /population/gangnam/dongs/11680640/stats/daily
 {
   "averagePopulation": 1050,
   "maxPopulation": 1200,
-  "minPopulation": 900
+  "minPopulation": 900,
+  "maxDate": "2024-01-15",
+  "minDate": "2024-01-01"
 }
 
 4. 주간/야간 통계
@@ -219,11 +230,74 @@ GET /population/gangnam/dongs/11680640/stats/gender-age
   }
 }
 
-* 프론트엔드에서 이 데이터를 활용하여 다음과 같은 통계를 계산할 수 있습니다:
-  - 성별별 총 인구수: maleAgeGroup과 femaleAgeGroup의 각 값들을 합산
-  - 성별별 비율: 총 인구수 대비 남성/여성 비율 계산
-  - 연령대별 성별 분포: 각 연령대별로 남성/여성 인구 비교
-  - 시간대별 성별 분포: 다른 API와 조합하여 시간대별 분석
+8. 성별별 총 인구수
+GET /population/gangnam/dongs/11680640/stats/gender
+
+{
+  "maleTotal": 500,
+  "femaleTotal": 580,
+  "totalPopulation": 1080,
+  "maleRatio": 46.3,
+  "femaleRatio": 53.7
+}
+
+9. 성별별 연령대 분포
+GET /population/gangnam/dongs/11680640/stats/gender-age-distribution
+
+{
+  "male": {
+    "0-9": 50,
+    "10-14": 30,
+    "15-19": 40,
+    "20-24": 80,
+    "25-29": 70,
+    "30-34": 60,
+    "35-39": 50,
+    "40-44": 40,
+    "45-49": 30,
+    "50-54": 25,
+    "55-59": 20,
+    "60-64": 15,
+    "65-69": 10,
+    "70+": 20
+  },
+  "female": {
+    "0-9": 55,
+    "10-14": 35,
+    "15-19": 45,
+    "20-24": 85,
+    "25-29": 75,
+    "30-34": 65,
+    "35-39": 55,
+    "40-44": 45,
+    "45-49": 35,
+    "50-54": 30,
+    "55-59": 25,
+    "60-64": 20,
+    "65-69": 15,
+    "70+": 25
+  }
+}
+
+10. 성별별 시간대 분포
+GET /population/gangnam/dongs/11680640/stats/gender-time
+
+{
+  "male": {
+    "새벽": 100,
+    "오전": 200,
+    "오후": 150,
+    "저녁": 80,
+    "밤": 70
+  },
+  "female": {
+    "새벽": 120,
+    "오전": 250,
+    "오후": 180,
+    "저녁": 100,
+    "밤": 90
+  }
+}
 
 8. 국내 인구 데이터
 GET /population/local-people/code/11680640
@@ -405,3 +479,12 @@ http GET :8081/population/long-foreigner/11680640
 
 # 성별/연령별 통계
 http GET :8081/population/gangnam/dongs/11680640/stats/gender-age
+
+# 성별별 총 인구수
+http GET :8081/population/gangnam/dongs/11680640/stats/gender
+
+# 성별별 연령대 분포
+http GET :8081/population/gangnam/dongs/11680640/stats/gender-age-distribution
+
+# 성별별 시간대 분포
+http GET :8081/population/gangnam/dongs/11680640/stats/gender-time

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class DayNightPopulationDto {
-    private Integer dayPopulation;
-    private Integer nightPopulation;
+    private Double dayPopulation;
+    private Double nightPopulation;
     private Double dayNightRatio;
 }

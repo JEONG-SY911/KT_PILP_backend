@@ -37,7 +37,55 @@ public class SeoulDistrictService {
                 .map(this::convertToDto);
     }
     
+    // 새 구 추가
+    @Transactional
+    public SeoulDistrictResponseDto addDistrict(SeoulDistrictResponseDto requestDto) {
+        // 중복 검사
+        if (seoulDistrictRepository.existsByDistrictCode(requestDto.getDistrictCode())) {
+            throw new RuntimeException("이미 존재하는 구 코드입니다: " + requestDto.getDistrictCode());
+        }
+        
+        if (seoulDistrictRepository.existsByDistrictName(requestDto.getDistrictName())) {
+            throw new RuntimeException("이미 존재하는 구 이름입니다: " + requestDto.getDistrictName());
+        }
+        
+        SeoulDistrict district = new SeoulDistrict();
+        district.setDistrictCode(requestDto.getDistrictCode());
+        district.setDistrictName(requestDto.getDistrictName());
+        district.setDistrictNameEng(requestDto.getDistrictNameEng());
+        district.setDescription(requestDto.getDescription());
+        district.setActive(true);
+        district.setSortOrder(requestDto.getDistrictCode() != null ? 
+            Integer.parseInt(requestDto.getDistrictCode()) : 999);
+        
+        SeoulDistrict savedDistrict = seoulDistrictRepository.save(district);
+        return convertToDto(savedDistrict);
+    }
     
+    // 구 정보 수정
+    @Transactional
+    public SeoulDistrictResponseDto updateDistrict(String districtCode, SeoulDistrictResponseDto requestDto) {
+        SeoulDistrict district = seoulDistrictRepository.findByDistrictCode(districtCode)
+                .orElseThrow(() -> new RuntimeException("구를 찾을 수 없습니다: " + districtCode));
+        
+        district.setDistrictName(requestDto.getDistrictName());
+        district.setDistrictNameEng(requestDto.getDistrictNameEng());
+        district.setDescription(requestDto.getDescription());
+        district.setActive(true);
+        
+        SeoulDistrict updatedDistrict = seoulDistrictRepository.save(district);
+        return convertToDto(updatedDistrict);
+    }
+    
+    // 구 비활성화 (삭제 대신)
+    @Transactional
+    public void deactivateDistrict(String districtCode) {
+        SeoulDistrict district = seoulDistrictRepository.findByDistrictCode(districtCode)
+                .orElseThrow(() -> new RuntimeException("구를 찾을 수 없습니다: " + districtCode));
+        
+        district.setActive(false);
+        seoulDistrictRepository.save(district);
+    }
     
     // Entity를 DTO로 변환 (실제 데이터베이스에 있는 구인지 확인)
     private SeoulDistrictResponseDto convertToDto(SeoulDistrict district) {
