@@ -130,4 +130,24 @@ public class PopulationDetailController {
         GenderTimeDistributionDto response = populationDetailService.getGenderTimeDistribution(adstrdCode);
         return ResponseEntity.ok(response);
     }
+    
+    // 한달 전 대비 인구 변화 조회
+    @GetMapping("/gangnam/dongs/{adstrdCode}/stats/population-change")
+    public ResponseEntity<PopulationChangeDto> getPopulationChange(
+            @PathVariable String adstrdCode,
+            @RequestParam(required = false) String date) {
+        PopulationChangeDto response = populationDetailService.getPopulationChange(adstrdCode, date);
+        return ResponseEntity.ok(response);
+    }
+    
+    // 동 이름으로 한달 전 대비 인구 변화 조회
+    @GetMapping("/gangnam/dongs/name/{dongName}/stats/population-change")
+    public ResponseEntity<PopulationChangeDto> getPopulationChangeByDongName(
+            @PathVariable String dongName,
+            @RequestParam(required = false) String date) {
+        // 동 이름으로 행정동 코드 찾기 후 인구 변화 조회
+        PopulationDetailResponseDto detail = populationDetailService.getPopulationDetailByDongName(dongName);
+        PopulationChangeDto response = populationDetailService.getPopulationChange(detail.getAdstrdCodeSe(), date);
+        return ResponseEntity.ok(response);
+    }
 }

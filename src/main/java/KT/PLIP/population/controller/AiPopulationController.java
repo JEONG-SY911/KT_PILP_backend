@@ -118,9 +118,9 @@ public class AiPopulationController {
 
         // 일일 통계
         AiPopulationBundleDto.DailyStats ds = new AiPopulationBundleDto.DailyStats();
-        ds.setAveragePopulation(Optional.ofNullable(dailyStatsDto.getAveragePopulation()).orElse(0));
-        ds.setMaxPopulation(Optional.ofNullable(dailyStatsDto.getMaxPopulation()).orElse(0));
-        ds.setMinPopulation(Optional.ofNullable(dailyStatsDto.getMinPopulation()).orElse(0));
+        ds.setAveragePopulation(Optional.ofNullable(dailyStatsDto.getAveragePopulation()).orElse(0.0));
+        ds.setMaxPopulation(Optional.ofNullable(dailyStatsDto.getMaxPopulation()).orElse(0.0));
+        ds.setMinPopulation(Optional.ofNullable(dailyStatsDto.getMinPopulation()).orElse(0.0));
         // 최대/최소 시간대 판단 (필터된 timeStats 기준)
         if (!timeStats.isEmpty()) {
             AiPopulationBundleDto.TimeStat maxTs = timeStats.stream()

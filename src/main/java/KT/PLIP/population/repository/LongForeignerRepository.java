@@ -13,6 +13,9 @@ public interface LongForeignerRepository extends JpaRepository<LongForeigner, Lo
     
     List<LongForeigner> findByAdstrdCodeSe(String adstrdCodeSe);
     
+    // 행정동 코드와 날짜로 조회
+    List<LongForeigner> findByAdstrdCodeSeAndStdrDeId(String adstrdCodeSe, String stdrDeId);
+    
     @Query("SELECT lf FROM LongForeigner lf WHERE lf.adstrdCodeSe IN :codes")
     List<LongForeigner> findByAdstrdCodes(@Param("codes") List<String> adstrdCodes);
 }

@@ -13,6 +13,9 @@ public interface TempForeignerRepository extends JpaRepository<TempForeigner, Lo
     
     List<TempForeigner> findByAdstrdCodeSe(String adstrdCodeSe);
     
+    // 행정동 코드와 날짜로 조회
+    List<TempForeigner> findByAdstrdCodeSeAndStdrDeId(String adstrdCodeSe, String stdrDeId);
+    
     @Query("SELECT tf FROM TempForeigner tf WHERE tf.adstrdCodeSe IN :codes")
     List<TempForeigner> findByAdstrdCodes(@Param("codes") List<String> adstrdCodes);
 }

@@ -82,9 +82,9 @@ public class AiPopulationBundleDto {
 	@Getter
 	@Setter
 	public static class DailyStats {
-		private Integer averagePopulation;
-		private Integer maxPopulation;
-		private Integer minPopulation;
+		private Double averagePopulation;
+		private Double maxPopulation;
+		private Double minPopulation;
 		private String maxPopulationTime;
 		private String minPopulationTime;
 	}

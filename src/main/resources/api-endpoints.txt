@@ -52,6 +52,10 @@ GET /population/gangnam/dongs/{adstrdCode}/stats/gender-age-distribution
 # 성별별 시간대 분포
 GET /population/gangnam/dongs/{adstrdCode}/stats/gender-time
 
+# 한달 전 대비 인구 변화 조회
+GET /population/gangnam/dongs/{adstrdCode}/stats/population-change?date=YYYYMMDD
+GET /population/gangnam/dongs/name/{dongName}/stats/population-change?date=YYYYMMDD
+
 국내 인구 데이터
 --------------
 GET /population/local-people/                    # 모든 국내 인구 데이터 조회

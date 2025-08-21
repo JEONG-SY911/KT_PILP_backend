@@ -14,6 +14,9 @@ public interface LocalPeopleRepository extends JpaRepository<LocalPeople, Long> 
     // 행정동 코드로 조회
     List<LocalPeople> findByAdstrdCodeSe(String adstrdCodeSe);
     
+    // 행정동 코드와 날짜로 조회
+    List<LocalPeople> findByAdstrdCodeSeAndStdrDeId(String adstrdCodeSe, String stdrDeId);
+    
     // 전체 인구가 특정 값 이상인 데이터 조회
     List<LocalPeople> findByTotLvpopCoGreaterThan(Integer totLvpopCo);
     

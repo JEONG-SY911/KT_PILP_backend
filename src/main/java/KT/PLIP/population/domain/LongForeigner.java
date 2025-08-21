@@ -15,7 +15,7 @@ public class LongForeigner {
     private Long id;
     
     @Column(name = "tot_lvpop_co")
-    private Integer totLvpopCo;
+    private Double totLvpopCo;
     
     @Column(name = "china_staypop_co")
     private Double chinaStaypopCo;

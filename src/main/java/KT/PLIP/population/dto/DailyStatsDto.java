@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class DailyStatsDto {
-    private Integer averagePopulation;
-    private Integer maxPopulation;
-    private Integer minPopulation;
+    private Double averagePopulation;
+    private Double maxPopulation;
+    private Double minPopulation;
     private String date;
 }

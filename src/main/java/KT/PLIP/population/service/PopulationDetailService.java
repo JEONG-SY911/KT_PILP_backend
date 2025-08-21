@@ -337,9 +337,9 @@ public class PopulationDetailService {
         }
         
         if (dailyPopulation.isEmpty()) {
-            dto.setAveragePopulation(0);
-            dto.setMaxPopulation(0);
-            dto.setMinPopulation(0);
+            dto.setAveragePopulation(0.0);
+            dto.setMaxPopulation(0.0);
+            dto.setMinPopulation(0.0);
             return dto;
         }
         
@@ -348,10 +348,10 @@ public class PopulationDetailService {
         double averagePopulation = totalPopulation / dailyPopulation.size();
         
         // 최대/최소 날짜와 인구 찾기
-        int maxPopulation = (int)Math.round(dailyPopulation.values().stream().mapToDouble(Double::doubleValue).max().orElse(0.0));
-        int minPopulation = (int)Math.round(dailyPopulation.values().stream().mapToDouble(Double::doubleValue).min().orElse(0.0));
+        double maxPopulation = Math.round(dailyPopulation.values().stream().mapToDouble(Double::doubleValue).max().orElse(0.0));
+        double minPopulation = Math.round(dailyPopulation.values().stream().mapToDouble(Double::doubleValue).min().orElse(0.0));
         
-        dto.setAveragePopulation((int) Math.round(averagePopulation));
+        dto.setAveragePopulation(averagePopulation);
         dto.setMaxPopulation(maxPopulation);
         dto.setMinPopulation(minPopulation);
         
@@ -774,5 +774,114 @@ public class PopulationDetailService {
                Optional.ofNullable(local.getFemaleF60t64LvpopCo()).orElse(0.0) +
                Optional.ofNullable(local.getFemaleF65t69LvpopCo()).orElse(0.0) +
                Optional.ofNullable(local.getFemaleF70t74LvpopCo()).orElse(0.0);
+    }
+    
+    // 한달 전 대비 인구 변화 조회
+    public PopulationChangeDto getPopulationChange(String adstrdCode) {
+        return getPopulationChange(adstrdCode, null);
+    }
+    
+    // 특정 날짜 기준으로 한달 전 대비 인구 변화 조회
+    public PopulationChangeDto getPopulationChange(String adstrdCode, String currentDate) {
+        PopulationChangeDto dto = new PopulationChangeDto();
+        dto.setAdstrdCodeSe(adstrdCode);
+        
+        // 동 정보 조회
+        Optional<GangnamPopulation> gangnamOpt = gangnamPopulationRepository.findByAdstrdCodeSe(adstrdCode);
+        if (gangnamOpt.isPresent()) {
+            dto.setDongName(gangnamOpt.get().getDongName());
+        }
+        
+        // 현재 날짜 설정 (기본값: 오늘)
+        if (currentDate == null) {
+            currentDate = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        }
+        dto.setCurrentDate(currentDate);
+        
+        // 한달 전 날짜 계산
+        String previousDate = calculatePreviousMonthDate(currentDate);
+        dto.setPreviousDate(previousDate);
+        
+        // 현재 인구 조회
+        Map<String, Double> currentPopulation = getPopulationByDate(adstrdCode, currentDate);
+        dto.setCurrentTotalPopulation(currentPopulation.get("total"));
+        
+        // 이전 인구 조회
+        Map<String, Double> previousPopulation = getPopulationByDate(adstrdCode, previousDate);
+        dto.setPreviousTotalPopulation(previousPopulation.get("total"));
+        
+        // 증감 수 계산
+        dto.setTotalPopulationChange(
+            Optional.ofNullable(dto.getCurrentTotalPopulation()).orElse(0.0) - 
+            Optional.ofNullable(dto.getPreviousTotalPopulation()).orElse(0.0)
+        );
+        
+        // 증감률 계산 (%)
+        dto.setTotalPopulationChangeRate(calculateChangeRate(
+            dto.getPreviousTotalPopulation(), dto.getCurrentTotalPopulation()));
+        
+        return dto;
+    }
+    
+    // 특정 날짜의 인구 조회
+    private Map<String, Double> getPopulationByDate(String adstrdCode, String date) {
+        Map<String, Double> result = new HashMap<>();
+        result.put("total", 0.0);
+        
+        // LocalPeople 데이터 조회
+        List<LocalPeople> localPeopleList = localPeopleRepository.findByAdstrdCodeSeAndStdrDeId(adstrdCode, date);
+        Double localTotal = localPeopleList.stream()
+                .mapToDouble(local -> Optional.ofNullable(local.getTotLvpopCo()).orElse(0.0))
+                .sum();
+        result.put("local", localTotal);
+        
+        // TempForeigner 데이터 조회
+        List<TempForeigner> tempForeignerList = tempForeignerRepository.findByAdstrdCodeSeAndStdrDeId(adstrdCode, date);
+        Double tempTotal = tempForeignerList.stream()
+                .mapToDouble(temp -> Optional.ofNullable(temp.getTotLvpopCo()).orElse(0.0))
+                .sum();
+        result.put("temp", tempTotal);
+        
+        // LongForeigner 데이터 조회
+        List<LongForeigner> longForeignerList = longForeignerRepository.findByAdstrdCodeSeAndStdrDeId(adstrdCode, date);
+        Double longTotal = longForeignerList.stream()
+                .mapToDouble(longF -> Optional.ofNullable(longF.getTotLvpopCo()).orElse(0.0))
+                .sum();
+        result.put("long", longTotal);
+        
+        // 총 인구 계산
+        result.put("total", localTotal + tempTotal + longTotal);
+        
+        return result;
+    }
+    
+    // 한달 전 날짜 계산 (YYYYMMDD 형식)
+    private String calculatePreviousMonthDate(String currentDate) {
+        try {
+            int year = Integer.parseInt(currentDate.substring(0, 4));
+            int month = Integer.parseInt(currentDate.substring(4, 6));
+            int day = Integer.parseInt(currentDate.substring(6, 8));
+            
+            java.time.LocalDate date = java.time.LocalDate.of(year, month, day);
+            java.time.LocalDate previousMonth = date.minusMonths(1);
+            
+            return previousMonth.format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        } catch (Exception e) {
+            // 오류 발생 시 기본값 반환
+            return "20240101";
+        }
+    }
+    
+    // 증감률 계산 (%)
+    private Double calculateChangeRate(Double previous, Double current) {
+        if (previous == null || previous == 0.0) {
+            return current != null && current > 0.0 ? 100.0 : 0.0;
+        }
+        
+        if (current == null) {
+            return -100.0;
+        }
+        
+        return ((current - previous) / previous) * 100.0;
     }
 }

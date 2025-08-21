@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class LongForeignerResponseDto {
     private Long id;
-    private Integer totLvpopCo;
+    private Double totLvpopCo;
     private Double chinaStaypopCo;
     private Double otherStaypopCo;
     private String oaCd;
