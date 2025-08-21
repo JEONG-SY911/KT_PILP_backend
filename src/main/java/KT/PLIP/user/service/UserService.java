@@ -3,6 +3,7 @@ package KT.PLIP.user.service;
 import KT.PLIP.user.domain.User;
 import KT.PLIP.user.dto.UserSignupRequestDto;
 import KT.PLIP.user.dto.UserLoginRequestDto;
+import KT.PLIP.user.dto.UserRequestDto;
 import KT.PLIP.user.dto.UserResponseDto;
 import KT.PLIP.user.repository.UserRepository;
 import KT.PLIP.favorite.domain.FavoriteLocation;
@@ -72,7 +73,7 @@ public class UserService {
     
     // 프로필 수정
     @Transactional
-    public UserResponseDto updateUserProfile(Long userId, UserResponseDto requestDto) {
+    public UserResponseDto updateUserProfile(Long userId, UserRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
         
@@ -83,6 +84,14 @@ public class UserService {
         
         User updatedUser = userRepository.save(user);
         return convertToDto(updatedUser);
+    }
+
+    // 프로필 삭제
+    @Transactional
+    public void deleteMyProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        userRepository.delete(user);
     }
     
     // 사용자 즐겨찾기 목록 조회
